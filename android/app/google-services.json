@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "493259870647",
+    "firebase_url": "https://to-do-list-b21c6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "to-do-list-b21c6",
+    "storage_bucket": "to-do-list-b21c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493259870647:android:57b1644fa42ede34da5832",
+        "android_client_info": {
+          "package_name": "com.rio.todo_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493259870647-s28g3q5clvhvamc2uq3nvtpfi9dtbc8r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQGwDECjQM1A-iAUtAVFUsjPN9gARCCf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493259870647-s28g3q5clvhvamc2uq3nvtpfi9dtbc8r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
