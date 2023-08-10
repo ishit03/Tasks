@@ -46,6 +46,10 @@ dependencies:
   cloud_firestore: ^4.8.4
   intl: ^0.18.1
   animations: ^2.0.7
+  timezone: any
+  flutter_local_notifications: ^15.1.0+1
+  flutter_timezone: ^1.0.7
+  permission_handler: ^10.4.3
 
 dev_dependencies:
   flutter_test:

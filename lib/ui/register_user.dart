@@ -169,23 +169,24 @@ class _RegisterUserState extends State<RegisterUser> {
                                   .colorScheme
                                   .primaryContainer,
                               padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const Flexible(child: Icon(
-                                        Icons.error_outline,
-                                        size: 50.0,
-                                        color: Colors.red,
-                                      )),
-                                      Flexible(child: Text(
-                                        FireAuth.errorCode,
-                                        style: const TextStyle(fontSize: 24.0),
-                                      ))
-                                    ],
-                                  )   ,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Flexible(
+                                      child: Icon(
+                                    Icons.error_outline,
+                                    size: 50.0,
+                                    color: Colors.red,
+                                  )),
+                                  Flexible(
+                                      child: Text(
+                                    FireAuth.errorCode,
+                                    style: const TextStyle(fontSize: 24.0),
+                                  ))
+                                ],
+                              ),
                             );
                           });
                         }
@@ -218,26 +219,22 @@ class _RegisterUserState extends State<RegisterUser> {
                             fontFamily: 'Viga',
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => {
-                                Navigator.pushReplacement(
-                                    context,
-                                    PageRouteBuilder(
-                                        pageBuilder: (_, __, ___) =>
-                                            const LogIn(email: ''),
-                                        transitionDuration:
-                                            const Duration(milliseconds: 500),
-                                        transitionsBuilder: (_, a, __, c) =>
-                                            SlideTransition(
-                                              position: Tween(
-                                                      begin: const Offset(
-                                                          -1.0, 0.0),
-                                                      end: Offset.zero)
-                                                  .animate(CurvedAnimation(
-                                                      parent: a,
-                                                      curve: Curves.ease)),
-                                              child: c,
-                                            )))
-                              })
+                          ..onTap = () => Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (_, __, ___) =>
+                                      const LogIn(email: ''),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  transitionsBuilder: (_, a, __, c) =>
+                                      SlideTransition(
+                                        position: Tween(
+                                                begin: const Offset(-1.0, 0.0),
+                                                end: Offset.zero)
+                                            .animate(CurvedAnimation(
+                                                parent: a, curve: Curves.ease)),
+                                        child: c,
+                                      ))))
                   ])))
             ],
           ),

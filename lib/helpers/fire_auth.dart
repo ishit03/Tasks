@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:todo_list/helpers/globals.dart';
 
 class FireAuth {
-
   static String errorCode = "";
 
   static Future<User?> registerUsingEmailPassword({

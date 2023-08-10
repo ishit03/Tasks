@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/helpers/globals.dart';
 
 class TasksListView extends StatefulWidget {
   final List<Map> tasks;
@@ -34,18 +35,16 @@ class _TasksListViewState extends State<TasksListView> {
                 height: 60,
                 margin: const EdgeInsets.symmetric(
                     horizontal: 15.0, vertical: 10.0),
-                child: Card(
+                child: const Card(
                   color: Colors.redAccent,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text('Delete Task'),
-                      Icon(Icons.delete_outline)
-                    ],
+                    children: [Text('Delete Task'), Icon(Icons.delete_outline)],
                   ),
                 )),
             onDismissed: (val) {
               widget.deleteTask(widget.tasks[index]["task"], widget.currDate);
+              notifService.notify.cancel(widget.tasks[index]["id"]);
               setState(() {
                 widget.tasks.removeAt(index);
               });
@@ -63,12 +62,10 @@ class _TasksListViewState extends State<TasksListView> {
               child: GestureDetector(
                   onLongPress: () {
                     setState(() {
-                      widget.tasks[index]["isDone"] =
-                          !widget.tasks[index]["isDone"];
+                      widget.tasks[index]["isDone"] = true;
                       widget.updateSubTask(
-                          widget.currDate,
-                          widget.tasks[index]["task"],
-                          widget.tasks[index]["isDone"]);
+                          widget.currDate, widget.tasks[index]["task"], true);
+                      notifService.notify.cancel(widget.tasks[index]["id"]);
                     });
                   },
                   child: Card(

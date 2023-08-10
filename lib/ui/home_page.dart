@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   _HomePageState() {
     datetime = DateTime.parse(currDate);
     currentTheme = prefs.getBool("isDark") ?? true;
+    //notifService.scheduleNotification(hour: 14, minute: 9, id: 0, task: "test");
   }
 
   @override
@@ -178,18 +180,28 @@ class _HomePageState extends State<HomePage> {
           )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var newTask = await showDialog(
+          Map<String, dynamic>? newTask = await showDialog(
               context: context,
               builder: (context) {
                 return const AddTask();
               },
               barrierDismissible: false);
-          db.addTaskToDB(newTask, currDate);
           if (newTask != null) {
+            notifService.scheduleNotification(
+                hour: newTask["hour"],
+                minute: newTask["minute"],
+                id: newTask["id"],
+                task: newTask["task"]);
+            newTask.remove("hour");
+            newTask.remove("minute");
+
+            db.addTaskToDB(newTask, currDate);
             setState(() {
               tasks.add(newTask);
             });
           }
+
+          //print(await notifService.notify.getActiveNotifications());
         },
         child: const Icon(
           Icons.add_outlined,
@@ -200,7 +212,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void addTasks(dbtasks) => tasks = dbtasks;
+  void addTasks(dbtasks) {
+    tasks = dbtasks;
+  }
 
   String displayString(DateTime date) {
     final DateTime dt = DateTime.now();

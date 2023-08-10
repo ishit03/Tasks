@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:todo_list/Theme.dart';
 import 'package:todo_list/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:todo_list/helpers/notification_service.dart';
 import 'package:todo_list/ui/home_page.dart';
 import 'package:todo_list/ui/log_in.dart';
 import 'package:todo_list/helpers/globals.dart';
@@ -11,6 +13,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initializeGlobals();
+  await Permission.notification.isDenied.then((value) => {
+        if (value) {Permission.notification.request()}
+      });
+  await notifService.initializeNotifications();
   runApp(const ToDo());
 }
 
