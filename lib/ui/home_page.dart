@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   _HomePageState() {
     datetime = DateTime.parse(currDate);
-    currentTheme = prefs.getBool("isDark");
+    currentTheme = prefs.getBool("isDark") ?? true;
   }
 
   @override

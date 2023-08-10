@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:todo_list/helpers/globals.dart';
 
 class FireAuth {
+
+  static String errorCode = "";
+
   static Future<User?> registerUsingEmailPassword({
     required String name,
     required String email,
@@ -15,7 +18,8 @@ class FireAuth {
       user = userCredential.user;
       user = firebaseAuth.currentUser;
     } on FirebaseAuthException catch (e) {
-    } catch (e) {}
+      errorCode = e.code.replaceAll("-", " ");
+    }
 
     return user;
   }
@@ -30,7 +34,8 @@ class FireAuth {
           .signInWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
-    } catch (e) {}
+      errorCode = e.code.replaceAll("-", " ");
+    }
     return user;
   }
 }

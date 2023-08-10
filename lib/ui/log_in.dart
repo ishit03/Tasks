@@ -23,6 +23,13 @@ class _LogInState extends State<LogIn> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _emailController.text = widget.email;
+  }
   @override
   Widget build(BuildContext context) {
     if (Firebase.apps.isEmpty) {
@@ -33,7 +40,6 @@ class _LogInState extends State<LogIn> {
         ),
       );
     }
-    _emailController.text = widget.email;
     return Scaffold(
         body: Center(
       child: SingleChildScrollView(
@@ -177,28 +183,28 @@ class _LogInState extends State<LogIn> {
                         }
                       } else {
                         SmartDialog.show(builder: (context) {
-                          return Center(
-                            child: Container(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                height: 200,
-                                width: 200,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      Icons.error_outline,
-                                      size: 50.0,
-                                      color: Colors.red,
-                                    ),
-                                    Text(
-                                      'Invalid Email \nOr Password',
-                                      style: TextStyle(fontSize: 24.0),
-                                    )
-                                  ],
+                          return Container(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer,
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: [
+                                const Flexible(child: Icon(
+                                  Icons.error_outline,
+                                  size: 50.0,
+                                  color: Colors.red,
                                 )),
+                                Flexible(child: Text(
+                                  FireAuth.errorCode,
+                                  style: const TextStyle(fontSize: 24.0),
+                                ))
+                              ],
+                            )   ,
                           );
                         });
                       }

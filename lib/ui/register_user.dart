@@ -164,29 +164,28 @@ class _RegisterUserState extends State<RegisterUser> {
                           }
                         } else {
                           SmartDialog.show(builder: (context) {
-                            return Center(
-                              child: Container(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
-                                  height: 100,
-                                  width: 200,
+                            return Container(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              padding: const EdgeInsets.all(20.0),
                                   child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    children: const [
-                                      Icon(
+                                    children: [
+                                      const Flexible(child: Icon(
                                         Icons.error_outline,
                                         size: 50.0,
                                         color: Colors.red,
-                                      ),
-                                      Text(
-                                        'User Already Exists',
-                                        style: TextStyle(fontSize: 24.0),
-                                      )
+                                      )),
+                                      Flexible(child: Text(
+                                        FireAuth.errorCode,
+                                        style: const TextStyle(fontSize: 24.0),
+                                      ))
                                     ],
-                                  )),
+                                  )   ,
                             );
                           });
                         }
