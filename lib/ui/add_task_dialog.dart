@@ -4,7 +4,8 @@ import 'package:flutter/material.dart ';
 import 'package:intl/intl.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  final DateTime datetime;
+  const AddTask({super.key, required this.datetime});
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -213,7 +214,8 @@ class _AddTaskState extends State<AddTask> with TickerProviderStateMixin {
 
   bool validateTime(TimeOfDay time) {
     DateTime now = DateTime.now();
-    return DateTime(now.year, now.month, now.day, time.hour, time.minute)
+    return DateTime(widget.datetime.year, widget.datetime.month,
+            widget.datetime.day, time.hour, time.minute)
         .isAfter(now);
   }
 }

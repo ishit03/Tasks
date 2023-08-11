@@ -19,7 +19,10 @@ class NotifService {
   }
 
   scheduleNotification(
-      {required int hour,
+      {required int year,
+      required int month,
+      required int day,
+      required int hour,
       required int minute,
       required int id,
       required String task}) async {
@@ -27,7 +30,7 @@ class NotifService {
         id,
         'Hurry Up!!! Your task is pending',
         task,
-        getTime(hour, minute),
+        getTime(day, month, year, hour, minute),
         const NotificationDetails(
           android: AndroidNotificationDetails('channel id', 'channel name',
               channelDescription: 'channel desc',
@@ -46,10 +49,8 @@ class NotifService {
     setLocalLocation(getLocation(local));
   }
 
-  TZDateTime getTime(int hour, int minute) {
-    final now = TZDateTime.now(local);
-    final scheduleTime =
-        TZDateTime(local, now.year, now.month, now.day, hour, minute);
+  TZDateTime getTime(int day, int month, int year, int hour, int minute) {
+    final scheduleTime = TZDateTime(local, year, month, day, hour, minute);
     return scheduleTime;
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -34,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   _HomePageState() {
     datetime = DateTime.parse(currDate);
     currentTheme = prefs.getBool("isDark") ?? true;
-    //notifService.scheduleNotification(hour: 14, minute: 9, id: 0, task: "test");
   }
 
   @override
@@ -104,11 +102,7 @@ class _HomePageState extends State<HomePage> {
               //right swipe
               swiped = true;
               datetime = datetime.subtract(const Duration(days: 1));
-              //print(datetime.toString());
             }
-            //swiped = true;
-            //print(update.delta.dx);
-            //print(swiped);
           },
           onHorizontalDragEnd: (val) {
             if (swiped) {
@@ -183,11 +177,16 @@ class _HomePageState extends State<HomePage> {
           Map<String, dynamic>? newTask = await showDialog(
               context: context,
               builder: (context) {
-                return const AddTask();
+                return AddTask(
+                  datetime: datetime,
+                );
               },
               barrierDismissible: false);
           if (newTask != null) {
             notifService.scheduleNotification(
+                year: datetime.year,
+                month: datetime.month,
+                day: datetime.day,
                 hour: newTask["hour"],
                 minute: newTask["minute"],
                 id: newTask["id"],
@@ -200,8 +199,6 @@ class _HomePageState extends State<HomePage> {
               tasks.add(newTask);
             });
           }
-
-          //print(await notifService.notify.getActiveNotifications());
         },
         child: const Icon(
           Icons.add_outlined,
