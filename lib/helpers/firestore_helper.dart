@@ -1,5 +1,4 @@
 import 'package:todo_list/helpers/globals.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' show FieldValue;
 
 class Database {
   late String user;
@@ -38,21 +37,12 @@ class Database {
     firestore.collection("tasks").doc(user).collection(date).doc(id).delete();
   }
 
-  void updateSubTaskInDB(String currDate, String taskId, updateField) {
-    if (updateField.runtimeType == List<Map<String, Object>>) {
-      firestore
-          .collection("tasks")
-          .doc(user)
-          .collection(currDate)
-          .doc(taskId)
-          .update({"subtasks": FieldValue.arrayUnion(updateField)});
-    } else if (updateField.runtimeType == bool) {
-      firestore
-          .collection("tasks")
-          .doc(user)
-          .collection(currDate)
-          .doc(taskId)
-          .update({"isDone": updateField});
-    }
+  void setIsDone(String currDate, String taskId, bool isDone) {
+    firestore
+        .collection("tasks")
+        .doc(user)
+        .collection(currDate)
+        .doc(taskId)
+        .update({"isDone": isDone});
   }
 }

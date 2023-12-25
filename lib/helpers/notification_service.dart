@@ -1,56 +1,47 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:timezone/timezone.dart';
-import 'package:timezone/data/latest.dart' as latest;
+import "package:awesome_notifications/awesome_notifications.dart";
+import "package:flutter/material.dart";
 
 class NotifService {
-  FlutterLocalNotificationsPlugin notify = FlutterLocalNotificationsPlugin();
   initializeNotifications() async {
-    configureLocalTimezone();
-
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings("@mipmap/tasks_icon");
-
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
-    await notify.initialize(initializationSettings);
+    AwesomeNotifications().initialize(null, [
+      NotificationChannel(
+          channelKey: 'alert_notify',
+          channelName: 'notify_channel',
+          channelDescription: 'Alerting users about due tasks',
+          importance: NotificationImportance.Default)
+    ]);
   }
 
-  scheduleNotification(
-      {required int year,
-      required int month,
-      required int day,
-      required int hour,
-      required int minute,
-      required int id,
-      required String task}) async {
-    await notify.zonedSchedule(
-        id,
-        'Hurry Up!!! Your task is pending',
-        task,
-        getTime(day, month, year, hour, minute),
-        const NotificationDetails(
-          android: AndroidNotificationDetails('channel id', 'channel name',
-              channelDescription: 'channel desc',
-              importance: Importance.max,
-              priority: Priority.max,
-              fullScreenIntent: true),
-        ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+  scheduleNotification({required DateTime date, hour, minute, id, task}) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'alert_notify',
+            title:
+                'Hurry Up!!! Your task is past due${Emojis.time_alarm_clock}',
+            body: task,
+            wakeUpScreen: true,
+            fullScreenIntent: true,
+            category: NotificationCategory.Message,
+            icon: 'resource://mipmap/tasks_notification_icon',
+            backgroundColor: Colors.black,
+            color: Colors.black),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'alert_notify',
+              label: 'Dismiss',
+              actionType: ActionType.DisabledAction)
+        ],
+        schedule: NotificationCalendar(
+            year: date.year,
+            month: date.month,
+            day: date.day,
+            hour: hour,
+            minute: minute,
+            timeZone: AwesomeNotifications.localTimeZoneIdentifier));
   }
 
-  void configureLocalTimezone() async {
-    latest.initializeTimeZones();
-    final String local = await FlutterTimezone.getLocalTimezone();
-    setLocalLocation(getLocation(local));
-  }
-
-  TZDateTime getTime(int day, int month, int year, int hour, int minute) {
-    final scheduleTime = TZDateTime(local, year, month, day, hour, minute);
-    return scheduleTime;
+  cancelNotification(id) {
+    AwesomeNotifications().cancel(id);
   }
 }

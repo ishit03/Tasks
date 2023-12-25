@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                           child: TasksListView(
                               tasks: tasks,
                               currDate: currDate,
-                              updateSubTask: db.updateSubTaskInDB,
+                              setIsDone: db.setIsDone,
                               deleteTask: db.deleteTaskFromDB));
                     } else {
                       return const Padding(
@@ -184,9 +184,7 @@ class _HomePageState extends State<HomePage> {
               barrierDismissible: false);
           if (newTask != null) {
             notifService.scheduleNotification(
-                year: datetime.year,
-                month: datetime.month,
-                day: datetime.day,
+                date: datetime,
                 hour: newTask["hour"],
                 minute: newTask["minute"],
                 id: newTask["id"],

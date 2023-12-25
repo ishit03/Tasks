@@ -3,14 +3,15 @@ import 'package:todo_list/helpers/globals.dart';
 
 class TasksListView extends StatefulWidget {
   final List<Map> tasks;
-  final Function updateSubTask;
+  final Function setIsDone;
   final Function(String id, String date) deleteTask;
   final String currDate;
+
   const TasksListView(
       {super.key,
       required this.tasks,
       required this.currDate,
-      required this.updateSubTask,
+      required this.setIsDone,
       required this.deleteTask});
 
   @override
@@ -20,7 +21,6 @@ class TasksListView extends StatefulWidget {
 class _TasksListViewState extends State<TasksListView> {
   bool isChecked = false;
   double maxWidthOfRow = 0;
-  TextEditingController subtaskController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     widget.tasks.sort((a, b) => (b["priority"].compareTo(a["priority"])));
@@ -44,7 +44,7 @@ class _TasksListViewState extends State<TasksListView> {
                 )),
             onDismissed: (val) {
               widget.deleteTask(widget.tasks[index]["task"], widget.currDate);
-              notifService.notify.cancel(widget.tasks[index]["id"]);
+              notifService.cancelNotification(widget.tasks[index]["id"]);
               setState(() {
                 widget.tasks.removeAt(index);
               });
@@ -63,13 +63,13 @@ class _TasksListViewState extends State<TasksListView> {
                   onLongPress: () {
                     setState(() {
                       widget.tasks[index]["isDone"] = true;
-                      widget.updateSubTask(
+                      widget.setIsDone(
                           widget.currDate, widget.tasks[index]["task"], true);
-                      notifService.notify.cancel(widget.tasks[index]["id"]);
+                      notifService
+                          .cancelNotification(widget.tasks[index]["id"]);
                     });
                   },
                   child: Card(
-                      //color: (widget.tasks[index]["isDone"])?Theme.of(context).primaryColor:Theme.of(context).cardColor,
                       surfaceTintColor:
                           Theme.of(context).cardTheme.surfaceTintColor,
                       shadowColor: Theme.of(context).cardTheme.shadowColor,
