@@ -6,7 +6,6 @@ class FireAuth {
   static String errorCode = "";
 
   static Future<User?> registerUsingEmailPassword({
-    required String name,
     required String email,
     required String password,
   }) async {
@@ -32,6 +31,9 @@ class FireAuth {
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
+      if (!userCredential.user!.emailVerified) {
+        throw FirebaseAuthException(code: 'Email is not verified');
+      }
     } on FirebaseAuthException catch (e) {
       errorCode = e.code.replaceAll("-", " ");
     }

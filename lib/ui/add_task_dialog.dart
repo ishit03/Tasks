@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart ';
 import 'package:intl/intl.dart';
+import 'package:todo_list/helpers/validate.dart';
 
 class AddTask extends StatefulWidget {
   final DateTime datetime;
@@ -13,18 +14,17 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> with TickerProviderStateMixin {
   bool isValidTime = true;
-  bool _isValid = true;
   TimeOfDay time = TimeOfDay.now();
   String currPri = "Moderate";
   var priority = {"Low": 65280, "Moderate": 16576515, "High": 16711680};
-  TextEditingController subtaskController = TextEditingController();
+
+  final _taskformkey = GlobalKey<FormFieldState>();
   TextEditingController taskController = TextEditingController();
   late final controller = AnimationController(
       vsync: this, duration: const Duration(milliseconds: 500));
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller.addListener(() {
       setState(() {});
@@ -55,26 +55,23 @@ class _AddTaskState extends State<AddTask> with TickerProviderStateMixin {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 10.0, vertical: 30.0),
-                  child: TextField(
+                  child: TextFormField(
+                      key: _taskformkey,
                       controller: taskController,
+                      validator: (val) => Validate.validateTask(val),
                       maxLines: 2,
                       minLines: 1,
-                      decoration: InputDecoration(
-                        prefixIconConstraints: const BoxConstraints(
-                            maxHeight: 20.0, minWidth: 20.0),
-                        prefixIcon: const Padding(
+                      decoration: const InputDecoration(
+                        prefixIconConstraints:
+                            BoxConstraints(maxHeight: 20.0, minWidth: 20.0),
+                        prefixIcon: Padding(
                             padding: EdgeInsets.only(right: 10.0, left: 10.0),
                             child: Icon(
                               Icons.edit,
                               size: 20.0,
                             )),
-                        contentPadding: const EdgeInsets.all(5.0),
+                        contentPadding: EdgeInsets.all(5.0),
                         labelText: 'Task',
-                        errorText: !_isValid ? "Task cannot be empty" : null,
-                        errorBorder: !_isValid
-                            ? const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red))
-                            : null,
                       )),
                 ),
                 Row(
@@ -176,14 +173,10 @@ class _AddTaskState extends State<AddTask> with TickerProviderStateMixin {
                         )),
                     TextButton(
                         onPressed: () {
-                          if (taskController.text.isEmpty) {
-                            setState(() {
-                              _isValid = false;
-                            });
+                          if (!_taskformkey.currentState!.validate()) {
                           } else if (!validateTime(time)) {
                             controller.forward(from: 0.0);
                             setState(() {
-                              _isValid = true;
                               isValidTime = false;
                             });
                           } else {

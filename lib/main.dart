@@ -31,15 +31,15 @@ class ToDo extends StatefulWidget {
 
 class _ToDoState extends State<ToDo> {
   ToDoTheme theme = ToDoTheme();
-  bool? prefTheme;
-  ThemeMode? mode;
+  late bool prefTheme;
+  late ThemeMode mode;
   String? user;
 
   _ToDoState() {
     prefTheme = prefs.getBool("isDark") ?? true;
-    mode = (prefTheme!) ? ThemeMode.dark : ThemeMode.light;
+    mode = (prefTheme) ? ThemeMode.dark : ThemeMode.light;
     user = prefs.getString("user");
-    ToDoTheme.setPrefTheme(prefTheme!);
+    ToDoTheme.setPrefTheme(prefTheme);
   }
 
   @override
@@ -63,5 +63,6 @@ class _ToDoState extends State<ToDo> {
     setState(() {
       this.mode = mode;
     });
+    ToDoTheme.switchTheme();
   }
 }

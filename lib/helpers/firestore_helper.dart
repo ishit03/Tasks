@@ -1,9 +1,13 @@
+///TODO
+///Optimize calls to firestore
+
 import 'package:todo_list/helpers/globals.dart';
 
 class Database {
   late String user;
   Function(List<Map>) addTasks;
   List<Map> tasks = [];
+
   Database(this.user, this.addTasks);
 
   Future getTasksFromDb(currDate) async {

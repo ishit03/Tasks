@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Theme.dart';
 import 'package:todo_list/main.dart';
@@ -22,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool swiped = false;
-  bool? currentTheme;
+  late bool currentTheme;
   String currDate = DateFormat("yyyyMMdd").format(DateTime.now());
 
   late DateTime datetime;
@@ -39,23 +38,22 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Tasks',
-          style: TextStyle(fontFamily: GoogleFonts.viga().fontFamily),
+          style: TextStyle(fontFamily: 'Viga'),
         ),
         actions: <Widget>[
           IconButton(
               onPressed: () {
-                (currentTheme!)
+                (currentTheme)
                     ? ToDo.of(context).changeTheme(ThemeMode.light)
                     : ToDo.of(context).changeTheme(ThemeMode.dark);
-                ToDoTheme.switchTheme();
                 setState(() {
                   currentTheme = ToDoTheme.isDark;
                 });
-                prefs.setBool("isDark", currentTheme!);
+                prefs.setBool("isDark", currentTheme);
               },
-              icon: Icon((currentTheme!)
+              icon: Icon((currentTheme)
                   ? Icons.light_mode_outlined
                   : Icons.dark_mode_outlined)),
           IconButton(
@@ -123,9 +121,7 @@ class _HomePageState extends State<HomePage> {
                   IconButton(
                       onPressed: () {
                         setState(() {
-                          datetime = datetime.subtract(const Duration(days: 1));
-                          currDate = DateFormat("yyyyMMdd").format(datetime);
-                          getTasks = db.getTasksFromDb(currDate);
+                          updateDate(-1);
                         });
                       },
                       icon: const Icon(
@@ -139,9 +135,7 @@ class _HomePageState extends State<HomePage> {
                   IconButton(
                       onPressed: () {
                         setState(() {
-                          datetime = datetime.add(const Duration(days: 1));
-                          currDate = DateFormat("yyyyMMdd").format(datetime);
-                          getTasks = db.getTasksFromDb(currDate);
+                          updateDate(1);
                         });
                       },
                       icon: const Icon(
@@ -207,8 +201,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void addTasks(dbtasks) {
-    tasks = dbtasks;
+  void addTasks(dbtasks) => tasks = dbtasks;
+
+  void updateDate(int days) {
+    datetime = datetime.add(Duration(days: days));
+    currDate = DateFormat("yyyyMMdd").format(datetime);
+    getTasks = db.getTasksFromDb(currDate);
   }
 
   String displayString(DateTime date) {

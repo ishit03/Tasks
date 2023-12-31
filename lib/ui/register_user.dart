@@ -1,11 +1,14 @@
+/// The name field has no significance yet as it is not stored or processed anywhere.
+/// Either it will be removed or maybe used to show current user on home page.
+
 import 'package:firebase_auth/firebase_auth.dart' show User;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:todo_list/helpers/validate.dart';
-import 'package:todo_list/helpers/globals.dart';
-import 'package:todo_list/ui/log_in.dart';
 import 'package:todo_list/helpers/fire_auth.dart';
+import 'package:todo_list/helpers/globals.dart';
+import 'package:todo_list/helpers/validate.dart';
+import 'package:todo_list/ui/log_in.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({super.key});
@@ -20,6 +23,7 @@ class _RegisterUserState extends State<RegisterUser> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +50,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       horizontal: 20.0, vertical: 10.0),
                   child: TextFormField(
                     controller: _nameController,
-                    validator: (val) => Validate.validateUser(val!),
+                    validator: (val) => Validate.validateUser(val),
                     style: const TextStyle(fontSize: 20.0),
                     decoration: const InputDecoration(
                         filled: true,
@@ -62,7 +66,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       horizontal: 20.0, vertical: 10.0),
                   child: TextFormField(
                     controller: _emailController,
-                    validator: (val) => Validate.validateEmail(val!),
+                    validator: (val) => Validate.validateEmail(val),
                     keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(fontSize: 20.0),
                     decoration: const InputDecoration(
@@ -79,12 +83,13 @@ class _RegisterUserState extends State<RegisterUser> {
                       horizontal: 20.0, vertical: 10.0),
                   child: TextFormField(
                     controller: _passwordController,
-                    validator: (val) => Validate.validatePassword(val!),
+                    validator: (val) => Validate.validatePassword(val),
                     obscureText: !passVisible,
                     obscuringCharacter: '*',
                     keyboardType: TextInputType.visiblePassword,
                     style: const TextStyle(
-                        /*color: Colors.black,*/ fontSize: 20.0),
+                        /*color: Colors.black,*/
+                        fontSize: 20.0),
                     //cursorColor: Colors.grey,
                     decoration: InputDecoration(
                         prefixIcon: const Icon(
@@ -121,7 +126,6 @@ class _RegisterUserState extends State<RegisterUser> {
                             maskColor:
                                 const Color.fromRGBO(255, 255, 255, 0.3));
                         User? user = await FireAuth.registerUsingEmailPassword(
-                            name: _nameController.text,
                             email: _emailController.text,
                             password: _passwordController.text);
                         SmartDialog.dismiss();

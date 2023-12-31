@@ -3,15 +3,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:todo_list/helpers/fire_auth.dart';
-import 'package:todo_list/ui/home_page.dart';
 import 'package:todo_list/helpers/validate.dart';
+import 'package:todo_list/ui/home_page.dart';
 import 'package:todo_list/ui/register_user.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import '../helpers/globals.dart';
 
 class LogIn extends StatefulWidget {
   final String email;
-  const LogIn({Key? key, required this.email}) : super(key: key);
+
+  const LogIn({super.key, required this.email});
+
   @override
   State<LogIn> createState() => _LogInState();
 }
@@ -19,28 +21,19 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   bool isLoading = true;
   bool passVisible = false;
-  bool isValid = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+  final _emailformkey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _emailController.text = widget.email;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (Firebase.apps.isEmpty) {
-      return Container(
-        color: Colors.white,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
     return Scaffold(
         body: Center(
       child: SingleChildScrollView(
@@ -64,23 +57,20 @@ class _LogInState extends State<LogIn> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
                 child: TextFormField(
+                  key: _emailformkey,
                   controller: _emailController,
-                  validator: (val) => Validate.validateEmail(val!),
+                  validator: (val) => Validate.validateEmail(val),
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.person),
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.person),
                     labelText: 'Email',
-                    errorText: isValid ? null : 'Invalid Email',
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.error)),
                   ),
                 )),
             Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
                 child: TextFormField(
-                  validator: (val) => Validate.validatePassword(val!),
+                  validator: (val) => Validate.validatePassword(val),
                   controller: _passwordController,
                   obscureText: !passVisible,
                   obscuringCharacter: '*',
@@ -105,11 +95,7 @@ class _LogInState extends State<LogIn> {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: TextButton(
                   onPressed: () {
-                    if (Validate.validateEmail(_emailController.text) != null) {
-                      setState(() {
-                        isValid = false;
-                      });
-                    } else {
+                    if (_emailformkey.currentState!.validate()) {
                       firebaseAuth.sendPasswordResetEmail(
                           email: _emailController.text);
                       showDialog(
@@ -131,9 +117,6 @@ class _LogInState extends State<LogIn> {
                               ],
                             );
                           });
-                      setState(() {
-                        isValid = true;
-                      });
                     }
                   },
                   child: const Text(
